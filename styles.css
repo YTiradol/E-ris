@@ -522,7 +522,7 @@ button:hover {
 
 /* 🔥 Nouvelle règle pour AGRANDIR VRAIMENT les emojis 🔥 */
 .nav-btn span {
-    font-size: 50px; /* Augmenter la taille des emojis */
+    font-size: 30px; /* Augmenter la taille des emojis */
     display: block; /* S'assure que l'emoji est bien séparé */
     line-height: 1; /* Évite que l'emoji soit trop petit */
 }
