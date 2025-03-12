@@ -25,11 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function afficherConseil(jour) {
         const conseils = {
-            "Lun": "Arrosez vos plantes le matin. 🌞",
-            "Mar": "Vérifiez l'humidité du sol avant d'arroser. 💧",
-            "Mer": "Taillez vos arbustes pour favoriser la croissance. ✂️",
-            "Jeu": "Pensez à désherber votre jardin. 🌱",
-            "Ven": "Apportez un engrais naturel à vos plantes. 🪴",
+            "Lun": "Arrose au pied de ta rose. 💧",
+            "Mar": "N'oublie pas que ta rose a besoin de 6h d'ensoleillement par jour. 🌞",
+            "Mer": "Arrose au pied de ta rose. 💧",
+            "Jeu": "Si il y en a coupe les fleurs fané pour encourager de nouvelle floraison. 🌱",
+            "Ven": "Arrose au pied de ta rose. 💧Tu peux ajouter de la paille pour garder l'humidité. 🪴",
             "Sam": "Vérifiez la présence de parasites. 🐛",
             "Dim": "Profitez de votre jardin et relaxez-vous ! ☀️"
         };
