@@ -10,6 +10,8 @@
         <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     </head>
 <body class="background-image">
 
@@ -52,6 +54,7 @@
         <h2 id="plant-info-name"></h2>
         <img id="plant-info-image" src="" alt="" style="width:100px; border-radius: 5px;">
         <p id="plant-info-description"></p>
+        <canvas id="humidityChart"></canvas>
         <button id="change-plant-image-btn">🖼️ Changer l'image</button>
 <input type="file" id="plant-image-input" accept="image/*" style="display: none;">
     </div>
@@ -70,10 +73,10 @@
                 <div class="plant-item" data-name="Dahlia"><img src="https://i.imgur.com/148U2zi.jpeg" alt="Dahlia"><p>Dahlia</p></div>
                 <div class="plant-item" data-name="Violette"><img src="https://i.imgur.com/ZVmZJO7.jpeg" alt="Violette"><p>Violette</p></div>
                 <div class="plant-item" data-name="Géranium"><img src="https://i.imgur.com/gozVHlu.jpeg" alt="Géranium"><p>Géranium</p></div>
-                <div class="plant-item" data-name="Plante 7"><img src="https://i.imgur.com/Sv0yLJZ.jpeg" alt="Plante 7"><p>Tulipe</p></div>
-                <div class="plant-item" data-name="Plante 8"><img src="https://i.imgur.com/JpSDXWq.jpeg" alt="Plante 8"><p>Pensée</p></div>
-                <div class="plant-item" data-name="Plante 9"><img src="https://i.imgur.com/k0xIerQ.jpeg" alt="Rose"><p>Rose</p></div>
-                <div class="plant-item" data-name="Plante 10"><img src="https://i.imgur.com/lzJgU4B.jpeg" alt="lys"><p>Lys</p></div>
+                <div class="plant-item" data-name="Tulipe"><img src="https://i.imgur.com/Sv0yLJZ.jpeg" alt="Tulipe"><p>Tulipe</p></div>
+                <div class="plant-item" data-name="Pensée"><img src="https://i.imgur.com/JpSDXWq.jpeg" alt="Pensée"><p>Pensée</p></div>
+                <div class="plant-item" data-name="Rose"><img src="https://i.imgur.com/k0xIerQ.jpeg" alt="Rose"><p>Rose</p></div>
+                <div class="plant-item" data-name="Lys"><img src="https://i.imgur.com/lzJgU4B.jpeg" alt="lys"><p>Lys</p></div>
             </div>
         </div>
     </div>
