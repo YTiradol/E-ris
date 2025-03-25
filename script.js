@@ -25,13 +25,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function afficherConseil(jour) {
         const conseils = {
-            "Lun": "Arrose au pied de ta rose. 💧",
-            "Mar": "N'oublie pas que ta rose a besoin de 6h d'ensoleillement par jour. 🌞",
-            "Mer": "Arrose au pied de ta rose. 💧",
-            "Jeu": "Si il y en a coupe les fleurs fané pour encourager de nouvelle floraison. 🌱",
-            "Ven": "Arrose au pied de ta rose. 💧Tu peux ajouter de la paille pour garder l'humidité. 🪴",
-            "Sam": "Vérifiez la présence de parasites. 🐛",
-            "Dim": "Profitez de votre jardin et relaxez-vous ! ☀️"
+            "Lun": "Emplacement ensoleillé : Plantez vos rosiers dans un endroit bénéficiant d'au moins six heures de soleil par jour. Une exposition ensoleillée favorise une floraison abondante et maintient la santé de la plante.",
+            "Mar": "Sol bien drainé : Assurez-vous que le sol est riche et offre un bon drainage. Les rosiers préfèrent un sol légèrement acide avec un pH autour de 6,5. Un sol bien drainé prévient les maladies liées à l'humidité excessive. ​",
+            "Mer": "Arrosage régulier : Arrosez vos rosiers régulièrement pour maintenir le sol humide, surtout pendant les périodes sèches. Il est recommandé d'arroser tôt le matin pour permettre aux feuilles de sécher, ce qui réduit le risque de maladies fongiques.",
+            "Jeu": "Fertilisation appropriée : Utilisez un engrais équilibré, riche en phosphore, pour encourager une floraison impressionnante. Appliquez l'engrais au début du printemps, lors de l'apparition des premières feuilles, puis après chaque cycle de floraison.",
+            "Ven": "Taille annuelle : Taillez vos rosiers au début du printemps pour éliminer le bois mort et stimuler la croissance de nouvelles tiges. La taille favorise une meilleure circulation de l'air et une floraison plus abondante.",
+            "Sam": "Paillage : Appliquez une couche de paillis organique autour de la base de vos rosiers pour conserver l'humidité du sol, réguler sa température et réduire la croissance des mauvaises herbes. Le paillage contribue également à enrichir le sol en matière organique.",
+            "Dim": "Surveillance des maladies et ravageurs : Inspectez régulièrement vos rosiers pour détecter les signes de maladies fongiques, telles que l'oïdium ou la tache noire, et la présence de parasites comme les pucerons. En cas d'infestation, traitez rapidement avec des solutions appropriées, telles que des fongicides ou des insecticides biologiques. "
         };
         
         document.getElementById("conseil-texte").textContent = conseils[jour] || "Aucun conseil disponible.";
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Affichage des infos dans la modale
             plantInfoName.textContent = plantName;
             plantInfoImage.src = plantImgSrc;
-            plantInfoDescription.textContent = "Info de la plante disponible quand l'equipe de developpement aura le budget d'acheter un broche arduino pour se connecter en bleuthoot"; // Laisse vide pour que tu puisses la remplir
+            plantInfoDescription.textContent = ""; // Laisse vide pour que tu puisses la remplir
 
             // Afficher la fenêtre modale
             plantInfoModal.style.display = "flex";
@@ -441,3 +441,95 @@ const plantDatabase = {
             reader.readAsDataURL(file);
         }
     });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const plantInfoModal = document.getElementById("plant-info-modal");
+        const closeInfoModal = document.getElementById("close-info-modal");
+    
+        let humidityChart; // Stocke le graphique
+        let humidityData = []; // Stocke l’historique des valeurs
+        let timeLabels = []; // Stocke les labels temporels
+        let updateInterval; // Stocke l'intervalle de mise à jour
+    
+        function generateRandomHumidity() {
+            return Math.floor(Math.random() * 81) + 10; // Génère un taux d’humidité entre 10% et 90%
+        }
+    
+        function updateChart() {
+            // Ajouter un nouvel instant T
+            let now = new Date();
+            let timeString = now.toLocaleTimeString();
+    
+            // Générer une nouvelle valeur d’humidité
+            let newHumidity = generateRandomHumidity();
+    
+            // Ajouter les nouvelles données
+            timeLabels.push(timeString);
+            humidityData.push(newHumidity);
+    
+            // Garder seulement les 10 dernières valeurs (évite surcharge)
+            if (humidityData.length > 10) {
+                humidityData.shift(); // Supprime l’ancienne valeur
+                timeLabels.shift();
+            }
+    
+            // Déterminer la couleur de la ligne
+            let lineColor = newHumidity >= 50 ? "blue" : "orange";
+    
+            // Mettre à jour le graphique
+            humidityChart.data.labels = timeLabels;
+            humidityChart.data.datasets[0].data = humidityData;
+            humidityChart.data.datasets[0].borderColor = lineColor;
+            humidityChart.update();
+        }
+    
+        function openPlantModal() {
+            // Réinitialiser les données
+            humidityData = [];
+            timeLabels = [];
+    
+            // Sélectionner le canvas
+            const ctx = document.getElementById("humidityChart").getContext("2d");
+    
+            // Créer le graphique
+            humidityChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: timeLabels,
+                    datasets: [{
+                        label: "Taux d'humidité (%)",
+                        data: humidityData,
+                        borderWidth: 2,
+                        borderColor: "blue",
+                        backgroundColor: "rgba(0, 0, 255, 0.1)",
+                        tension: 0.3 // Ajoute un effet lissé
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+    
+            // Lancer la mise à jour toutes les 10 secondes
+            updateChart(); // Premier point immédiatement
+            updateInterval = setInterval(updateChart, 10000);
+    
+            // Afficher la modale
+            plantInfoModal.style.display = "none";
+        }
+    
+        // Fermer la modale et arrêter la mise à jour
+        closeInfoModal.addEventListener("click", () => {
+            plantInfoModal.style.display = "none";
+            clearInterval(updateInterval); // Stopper les mises à jour
+        });
+    
+        // Exemple : ouvrir la modale quand on clique sur une plante (à adapter selon ton projet)
+        document.getElementById("add-plant-btn").addEventListener("click", openPlantModal);
+    });
+    
