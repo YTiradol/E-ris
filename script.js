@@ -98,14 +98,18 @@ document.addEventListener("DOMContentLoaded", () => {
     function afficherInfoPlante(plantItem) {
         const plantName = plantItem.getAttribute("data-name");
         const plantDescription = plantItem.getAttribute("data-description");
-        
-        plantInfoContent.innerHTML = `<h2>${plantName}</h2><p>${plantDescription}</p>`;
-        plantInfoModal.style.display = "flex";
-    }
-
-    closePlantInfo.addEventListener("click", () => {
-        plantInfoModal.style.display = "none";
-    });
+    
+        // Récupérer le conseil du jour
+        const conseilDuJour = document.getElementById("conseil-texte").textContent;
+    
+        // Mettre à jour le contenu de la modale
+        document.getElementById("plant-info-name").textContent = plantName;
+        document.getElementById("plant-info-description").textContent = plantDescription;
+        document.getElementById("plant-info-conseil").textContent = conseilDuJour; // Ajout du conseil
+    
+        // Afficher la modale
+        document.getElementById("plant-info-modal").style.display = "flex";
+    }    
 });
 
 document.addEventListener("DOMContentLoaded", () => {
