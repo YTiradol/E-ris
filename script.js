@@ -25,13 +25,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function afficherConseil(jour) {
         const conseils = {
-            "Lun": "Emplacement ensoleillé : Plantez vos rosiers dans un endroit bénéficiant d'au moins six heures de soleil par jour. Une exposition ensoleillée favorise une floraison abondante et maintient la santé de la plante.",
-            "Mar": "Sol bien drainé : Assurez-vous que le sol est riche et offre un bon drainage. Les rosiers préfèrent un sol légèrement acide avec un pH autour de 6,5. Un sol bien drainé prévient les maladies liées à l'humidité excessive. ​",
-            "Mer": "Arrosage régulier : Arrosez vos rosiers régulièrement pour maintenir le sol humide, surtout pendant les périodes sèches. Il est recommandé d'arroser tôt le matin pour permettre aux feuilles de sécher, ce qui réduit le risque de maladies fongiques.",
-            "Jeu": "Fertilisation appropriée : Utilisez un engrais équilibré, riche en phosphore, pour encourager une floraison impressionnante. Appliquez l'engrais au début du printemps, lors de l'apparition des premières feuilles, puis après chaque cycle de floraison.",
-            "Ven": "Taille annuelle : Taillez vos rosiers au début du printemps pour éliminer le bois mort et stimuler la croissance de nouvelles tiges. La taille favorise une meilleure circulation de l'air et une floraison plus abondante.",
-            "Sam": "Paillage : Appliquez une couche de paillis organique autour de la base de vos rosiers pour conserver l'humidité du sol, réguler sa température et réduire la croissance des mauvaises herbes. Le paillage contribue également à enrichir le sol en matière organique.",
-            "Dim": "Surveillance des maladies et ravageurs : Inspectez régulièrement vos rosiers pour détecter les signes de maladies fongiques, telles que l'oïdium ou la tache noire, et la présence de parasites comme les pucerons. En cas d'infestation, traitez rapidement avec des solutions appropriées, telles que des fongicides ou des insecticides biologiques. "
+            "Lun": "Veuillez vous connecter à un boitier E-Jardin pour commencer",
+            "Mar": "Veuillez vous connecter à un boitier E-Jardin pour commencer",
+            "Mer": "Veuillez vous connecter à un boitier E-Jardin pour commencer",
+            "Jeu": "Veuillez vous connecter à un boitier E-Jardin pour commencer",
+            "Ven": "Veuillez vous connecter à un boitier E-Jardin pour commencer",
+            "Sam": "Veuillez vous connecter à un boitier E-Jardin pour commencer",
+            "Dim": "Veuillez vous connecter à un boitier E-Jardin pour commencer"
         };
         
         document.getElementById("conseil-texte").textContent = conseils[jour] || "Aucun conseil disponible.";
@@ -536,21 +536,21 @@ const plantDatabase = {
         // Exemple : ouvrir la modale quand on clique sur une plante (à adapter selon ton projet)
         document.getElementById("add-plant-btn").addEventListener("click", openPlantModal);
     });
-
-document.getElementById("connectBtn").addEventListener("click", async () => {
-    try {
-        const device = await navigator.bluetooth.requestDevice({
-            acceptAllDevices: true, // Permet de choisir n'importe quel appareil Bluetooth
-            optionalServices: ['battery_service'] // Permet d'accéder à la batterie (facultatif)
-        });
-
-        document.getElementById("deviceName").textContent = 
-            `Connecté à : ${device.name || 'Appareil sans nom'}`;
-        
-        console.log("Appareil sélectionné :", device);
-    } catch (error) {
-        console.error("Erreur lors de la connexion Bluetooth :", error);
-        alert("Impossible de se connecter à un appareil Bluetooth.");
-    }
-});
-
+    
+    document.getElementById("connectBtn").addEventListener("click", async () => {
+        try {
+            const device = await navigator.bluetooth.requestDevice({
+                acceptAllDevices: true, // Permet de choisir n'importe quel appareil Bluetooth
+                optionalServices: ['battery_service'] // Permet d'accéder à la batterie (facultatif)
+            });
+    
+            document.getElementById("deviceName").textContent = 
+                `Connecté à : ${device.name || 'Appareil sans nom'}`;
+            
+            console.log("Appareil sélectionné :", device);
+        } catch (error) {
+            console.error("Erreur lors de la connexion Bluetooth :", error);
+            alert("Impossible de se connecter à un appareil Bluetooth.");
+        }
+    });
+    
