@@ -536,4 +536,21 @@ const plantDatabase = {
         // Exemple : ouvrir la modale quand on clique sur une plante (à adapter selon ton projet)
         document.getElementById("add-plant-btn").addEventListener("click", openPlantModal);
     });
-    
+
+document.getElementById("connectBtn").addEventListener("click", async () => {
+    try {
+        const device = await navigator.bluetooth.requestDevice({
+            acceptAllDevices: true, // Permet de choisir n'importe quel appareil Bluetooth
+            optionalServices: ['battery_service'] // Permet d'accéder à la batterie (facultatif)
+        });
+
+        document.getElementById("deviceName").textContent = 
+            `Connecté à : ${device.name || 'Appareil sans nom'}`;
+        
+        console.log("Appareil sélectionné :", device);
+    } catch (error) {
+        console.error("Erreur lors de la connexion Bluetooth :", error);
+        alert("Impossible de se connecter à un appareil Bluetooth.");
+    }
+});
+
