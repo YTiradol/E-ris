@@ -534,3 +534,8 @@ button:hover {
     line-height: 1;
     filter: grayscale(100%); /* Rend l'emoji noir et blanc */
 }
+
+#connectBtn{
+    background-color: #4caf50;
+    color: white;
+}
