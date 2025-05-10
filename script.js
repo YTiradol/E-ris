@@ -519,6 +519,134 @@ Peux-tu :
   }
 
   async function analyserPlante(id, nom, prompt) {
+    const div = document.getElementById(`reponse-${id}`); 
+    div.innerHTML = "🧠 Analyse en cours...";
+
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer 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',
+          'HTTP-Referer': 'https://www.e-jardin.com',
+          'X-Title': 'e-jardin',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'deepseek/deepseek-r1:free',
+          messages: [{ role: 'user', content: prompt }],
+        }),
+      });
+
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content || "Pas de réponse IA.";
+      div.innerHTML = marked.parse(content);
+
+      const jours = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+      jours.forEach(jour => {
+        const regex = new RegExp(jour, "i");
+        if (content.match(regex)) {
+          calendrierGlobal[jour].push(nom);
+        }
+      });
+    } catch (err) {
+      div.innerHTML = "Erreur IA : " + err.message;
+    }
+  }
+
+  function afficherCalendrier() {
+    let html = `<table><tr><th>Jour</th><th>Plantes à arroser</th></tr>`;
+    for (const jour in calendrierGlobal) {
+      html += `<tr><td>${jour}</td><td>${calendrierGlobal[jour].join(", ") || "Aucune"}</td></tr>`;
+    }
+    html += "</table>";
+    document.getElementById("calendar").innerHTML = html;
+  }
+
+  async function connecterArduino() {
+    try {
+      port = await navigator.serial.requestPort();
+      await port.open({ baudRate: 9600 }); 
+      reader = port.readable.getReader();
+      lireDonnees();
+    } catch (e) {
+      alert("Erreur de connexion : " + e);
+    }
+  }
+
+  async function lireDonnees() {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      const texte = new TextDecoder().decode(value);
+      traiterDonnees(texte.trim());
+    }
+  }
+
+  function traiterDonnees(texte) {
+    const match = texte.match(/Temp:(\d+);Hum:(\d+);Lum:(\d+)/);
+    if (match) {
+      currentData.temperature = match[1];
+      currentData.humidite = match[2];
+      currentData.luminosite = match[3];
+      document.getElementById("donnees").textContent =
+        `🌡️ ${match[1]} °C | 💧 ${match[2]} % | ☀️ ${match[3]}`;
+    }
+  }
+
+  function ajouterPlanteDepuisArduino() {
+    const nom = document.getElementById("nomPlante").value.trim();
+    if (!nom) return alert("Entrez un nom de plante");
+
+    const id = compteur++;
+    const div = document.createElement('div');
+    div.className = "plante-entry";
+    div.id = `plante-${id}`;
+    div.innerHTML = `
+      <strong>${nom}</strong><br>
+      Temp: ${currentData.temperature} °C, Hum: ${currentData.humidite} %, Lum: ${currentData.luminosite}<br>
+      <div id="reponse-${id}">🧠 En attente d'analyse...</div>
+    `;
+    div.dataset.nom = nom;
+    div.dataset.temp = currentData.temperature;
+    div.dataset.hum = currentData.humidite;
+    div.dataset.lum = currentData.luminosite;
+
+    document.getElementById("plantes").appendChild(div);
+    document.getElementById("nomPlante").value = "";
+  }
+
+  async function analyserToutes() {
+    calendrierGlobal = {
+      "Lundi": [], "Mardi": [], "Mercredi": [],
+      "Jeudi": [], "Vendredi": [], "Samedi": [], "Dimanche": []
+    };
+
+    const plantes = document.querySelectorAll('.plante-entry');
+    const promises = [];
+
+    plantes.forEach(plante => {
+      const id = plante.id.split("-")[1];
+      const nom = plante.dataset.nom;
+      const temp = plante.dataset.temp;
+      const hum = plante.dataset.hum;
+      const lum = plante.dataset.lum;
+
+      const prompt = `Voici les données pour une plante nommée "${nom}" :
+Température : ${temp} °C
+Humidité du sol : ${hum} %
+Luminosité : ${lum}
+Peux-tu :
+1. Donner des conseils d’entretien pour cette plante ?
+2. Proposer un planning hebdomadaire d’arrosage (par jour de la semaine) ?`;
+
+      promises.push(analyserPlante(id, nom, prompt));
+    });
+
+    await Promise.all(promises);
+    afficherCalendrier();
+  }
+
+  async function analyserPlante(id, nom, prompt) {
     const div = document.getElementById(`reponse-${id}`);
     div.innerHTML = "🧠 Analyse en cours...";
 
@@ -561,3 +689,11 @@ Peux-tu :
     html += "</table>";
     document.getElementById("calendar").innerHTML = html;
   }
+
+function affok () {
+  document.getElementById("RA-section").style.display = "block";
+}
+
+function affpas () {
+  document.getElementById("RA-section").style.display = "none";
+}
