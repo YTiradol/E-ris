@@ -454,39 +454,6 @@ const plantDatabase = {
     }
   }
 
-  function traiterDonnees(texte) {
-    const match = texte.match(/Temp:(\d+);Hum:(\d+);Lum:(\d+)/);
-    if (match) {
-      currentData.temperature = match[1];
-      currentData.humidite = match[2];
-      currentData.luminosite = match[3];
-      document.getElementById("donnees").textContent =
-        `🌡️ ${match[1]} °C | 💧 ${match[2]} % | ☀️ ${match[3]}`;
-    }
-  }
-
-  function ajouterPlanteDepuisArduino() {
-    const nom = document.getElementById("nomPlante").value.trim();
-    if (!nom) return alert("Entrez un nom de plante");
-
-    const id = compteur++;
-    const div = document.createElement('div');
-    div.className = "plante-entry";
-    div.id = `plante-${id}`;
-    div.innerHTML = `
-      <strong>${nom}</strong><br>
-      Temp: ${currentData.temperature} °C, Hum: ${currentData.humidite} %, Lum: ${currentData.luminosite}<br>
-      <div id="reponse-${id}">🧠 En attente d'analyse...</div>
-    `;
-    div.dataset.nom = nom;
-    div.dataset.temp = currentData.temperature;
-    div.dataset.hum = currentData.humidite;
-    div.dataset.lum = currentData.luminosite;
-
-    document.getElementById("plantes").appendChild(div);
-    document.getElementById("nomPlante").value = "";
-  }
-
   async function analyserToutes() {
     calendrierGlobal = {
       "Lundi": [], "Mardi": [], "Mercredi": [],
@@ -565,7 +532,7 @@ Peux-tu :
   async function connecterArduino() {
     try {
       port = await navigator.serial.requestPort();
-      await port.open({ baudRate: 9600 }); 
+      await port.open({ baudRate: 9600 });
       reader = port.readable.getReader();
       lireDonnees();
     } catch (e) {
@@ -594,11 +561,12 @@ Peux-tu :
   }
 
   function ajouterPlanteDepuisArduino() {
-    const nom = document.getElementById("nomPlante").value.trim();
+    const nom = document.getElementById("plante").value.trim();
     if (!nom) return alert("Entrez un nom de plante");
 
     const id = compteur++;
     const div = document.createElement('div');
+    div.setAttribute = ("id", "cadre");
     div.className = "plante-entry";
     div.id = `plante-${id}`;
     div.innerHTML = `
@@ -612,11 +580,11 @@ Peux-tu :
     div.dataset.lum = currentData.luminosite;
 
     document.getElementById("plantes").appendChild(div);
-    document.getElementById("nomPlante").value = "";
+    document.getElementById("plante").value = "";
   }
 
   async function analyserToutes() {
-    calendrierGlobal = {
+    calendrierGlobal = { 
       "Lundi": [], "Mardi": [], "Mercredi": [],
       "Jeudi": [], "Vendredi": [], "Samedi": [], "Dimanche": []
     };
@@ -681,19 +649,10 @@ Peux-tu :
     }
   }
 
-  function afficherCalendrier() {
-    let html = `<table><tr><th>Jour</th><th>Plantes à arroser</th></tr>`;
-    for (const jour in calendrierGlobal) {
-      html += `<tr><td>${jour}</td><td>${calendrierGlobal[jour].join(", ") || "Aucune"}</td></tr>`;
-    }
-    html += "</table>";
-    document.getElementById("calendar").innerHTML = html;
-  }
+function affpas () {
+  document.getElementById("RA-section").style.display = "none";
+}
 
 function affok () {
   document.getElementById("RA-section").style.display = "block";
-}
-
-function affpas () {
-  document.getElementById("RA-section").style.display = "none";
 }

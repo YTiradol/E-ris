@@ -13,7 +13,17 @@
 }
 
 
+.donnee {
+  font-weight: bold;
+  margin: 10px 0;
+}
 
+#response {
+  margin-top: 30px;
+  padding: 15px;
+  background: #fff;
+  border-radius: 8px;
+}
 
 
 /* Image de fond */  
@@ -1156,4 +1166,9 @@ body {
   border: none;
   border-radius: 8px;
   cursor: pointer;
+}
+
+#cadre {
+    border: #388E3C;
+    border-width: 2px;
 }
